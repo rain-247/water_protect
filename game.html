@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲</title>
+    <link rel="stylesheet" href="game.css">
+    <script defer src="game.js"></script>
+</head>
+<body>
+    <header>
+        <h1>小遊戲</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="activities.html">近期活動</a></li>
+                <li><a href="already.html">已報名活動</a></li>
+                <li><a href="game.html">小遊戲</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="game-instructions">
+            <h2>遊戲說明</h2>
+            <p>點擊正確的環保物品來保護河流，避免污染源進入水域！</p>
+            <button id="start-game">開始遊戲</button>
+        </section>
+        
+        <section id="game-screen" class="hidden">
+            <h2>遊戲進行中</h2>
+            <p>分數：<span id="score">0</span></p>
+            <p>污染程度：<span id="pollution-level">0%</span></p>
+            <div id="game-area">
+                <div id="river"></div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>水源保護平台 | 共同守護我們的水源</p>
+    </footer>
+</body>
+</html>
