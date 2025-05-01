@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
         gameScreen.classList.remove("hidden");
         gameArea.innerHTML = "";
 
-        // 重新建立河流，確保遊戲開始時顯示
         river = document.createElement("div");
         river.id = "river";
         gameArea.appendChild(river);
@@ -57,6 +56,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 score += 10;
             } else {
                 score -= 5;
+                pollutionLevel += 20;
+                if (pollutionLevel >= 100) {
+                    pollutionLevel = 100;
+                    pollutionElement.textContent = pollutionLevel + "%";
+                    updateRiverAppearance();
+                    endGame();
+                    return;
+                }
+                pollutionElement.textContent = pollutionLevel + "%";
+                updateRiverAppearance();
             }
             scoreElement.textContent = score;
             trash.remove();

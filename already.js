@@ -1,48 +1,41 @@
+
 document.addEventListener("DOMContentLoaded", function() {
-    const eventContainer = document.querySelector(".event-container");
-    const registerButtons = document.querySelectorAll(".register-btn");
+    const eventList = document.querySelector(".event-list");
     let registeredEvents = JSON.parse(localStorage.getItem("registeredEvents")) || [];
 
-    function openRegistrationForm(eventId) {
-        const popup = document.createElement("div");
-        popup.classList.add("popup-form");
-        popup.innerHTML = `
-            <div class="popup-content">
-                <h2>活動報名</h2>
-                <form id="popup-event-form">
-                    <label for="popup-name">姓名：</label>
-                    <input type="text" id="popup-name" required>
-                    
-                    <label for="popup-email">電子郵件：</label>
-                    <input type="email" id="popup-email" required>
-                    
-                    <button type="submit">提交報名</button>
-                    <button type="button" id="close-popup">取消</button>
-                </form>
-            </div>
-        `;
-        document.body.appendChild(popup);
+    function renderEvents() {
+        eventList.innerHTML = "";
+        if (registeredEvents.length === 0) {
+            eventList.innerHTML = "<p style='text-align:center; color:gray;'>您尚未報名任何活動。</p>";
+            return;
+        }
 
-        document.getElementById("popup-event-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const name = document.getElementById("popup-name").value;
-            const email = document.getElementById("popup-email").value;
-
-            registeredEvents.push({ id: eventId, name, email });
-            localStorage.setItem("registeredEvents", JSON.stringify(registeredEvents));
-            alert("報名成功！");
-            document.body.removeChild(popup);
+        registeredEvents.forEach((event, index) => {
+            const eventElement = document.createElement("div");
+            eventElement.classList.add("event-item");
+            eventElement.style.display = "block";
+            eventElement.innerHTML = `
+                <h3>${event.title}</h3>
+                <p><strong>日期：</strong>${event.date || "未提供"}</p>
+                <p><strong>地點：</strong>${event.location || "未提供"}</p>
+                <p><strong>報名者：</strong>${event.name}</p>
+                <p><strong>Email：</strong>${event.email}</p>
+                <button class="cancel-btn" data-index="${index}">取消報名</button>
+            `;
+            eventList.appendChild(eventElement);
         });
 
-        document.getElementById("close-popup").addEventListener("click", function() {
-            document.body.removeChild(popup);
+        document.querySelectorAll(".cancel-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                const index = parseInt(this.dataset.index);
+                if (!isNaN(index)) {
+                    registeredEvents.splice(index, 1);
+                    localStorage.setItem("registeredEvents", JSON.stringify(registeredEvents));
+                    renderEvents();
+                }
+            });
         });
     }
 
-    registerButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            const eventId = this.dataset.id;
-            openRegistrationForm(eventId);
-        });
-    });
+    renderEvents();
 });

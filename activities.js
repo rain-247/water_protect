@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function() {
     const eventContainer = document.querySelector(".event-container");
     let registeredEvents = JSON.parse(localStorage.getItem("registeredEvents")) || [];
@@ -18,9 +19,9 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function openRegistrationForm(eventId, eventTitle) {
+    function openRegistrationForm(event) {
         const contentHtml = `
-            <h2>報名活動 - ${eventTitle}</h2>
+            <h2>報名活動 - ${event.title}</h2>
             <form id="popup-event-form">
                 <label for="popup-name">姓名：</label>
                 <input type="text" id="popup-name" required>
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <label for="popup-email">電子郵件：</label>
                 <input type="email" id="popup-email" required>
                 
-                <button type="submit">提交報名</button>
+                <button type="submit" class="submit-btn">提交報名</button>
             </form>
         `;
         openPopup(contentHtml);
@@ -38,7 +39,14 @@ document.addEventListener("DOMContentLoaded", function() {
             const name = document.getElementById("popup-name").value;
             const email = document.getElementById("popup-email").value;
 
-            registeredEvents.push({ id: eventId, title: eventTitle, name, email });
+            registeredEvents.push({
+                id: event.id,
+                title: event.title,
+                date: event.date,
+                location: event.location,
+                name,
+                email
+            });
             localStorage.setItem("registeredEvents", JSON.stringify(registeredEvents));
             alert("報名成功！");
             document.querySelector(".popup-overlay").remove();
@@ -72,26 +80,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 <h3>${event.title}</h3>
                 <p><strong>日期：</strong>${event.date}</p>
                 <p><strong>地點：</strong>${event.location}</p>
-                <button class="detail-btn" data-id="${event.id}">詳細說明</button>
-                <button class="register-btn" data-id="${event.id}" data-title="${event.title}">報名</button>
+                <button class="detail-btn">詳細說明</button>
+                <button class="register-btn">報名</button>
             `;
             eventContainer.appendChild(eventElement);
-        });
 
-        document.querySelectorAll(".register-btn").forEach(button => {
-            button.addEventListener("click", function() {
-                const eventId = this.dataset.id;
-                const eventTitle = this.dataset.title;
-                openRegistrationForm(eventId, eventTitle);
-            });
-        });
-
-        document.querySelectorAll(".detail-btn").forEach(button => {
-            button.addEventListener("click", function() {
-                const eventId = this.dataset.id;
-                const selectedEvent = events.find(event => event.id == eventId);
-                openDescriptionPopup(selectedEvent);
-            });
+            eventElement.querySelector(".detail-btn").addEventListener("click", () => openDescriptionPopup(event));
+            eventElement.querySelector(".register-btn").addEventListener("click", () => openRegistrationForm(event));
         });
     }
 

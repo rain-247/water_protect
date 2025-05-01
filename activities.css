@@ -200,3 +200,25 @@ footer {
     color: white;
     margin-top: auto;
 }
+
+/* RWD 響應式設計 */
+@media screen and (max-width: 768px) {
+    main {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .event-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-item {
+        width: 90%;
+    }
+
+    .popup-content {
+        width: 95%;
+        padding: 20px;
+    }
+}
